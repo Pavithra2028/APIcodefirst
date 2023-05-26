@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIcodefirst.Migrations
 {
     [DbContext(typeof(HotelContext))]
-    [Migration("20230526060557_Begin")]
-    partial class Begin
+    [Migration("20230526074526_API")]
+    partial class API
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,12 +42,7 @@ namespace APIcodefirst.Migrations
                     b.Property<string>("CustomerPassword")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HotelsHotelId")
-                        .HasColumnType("int");
-
                     b.HasKey("CustomerId");
-
-                    b.HasIndex("HotelsHotelId");
 
                     b.ToTable("Customers");
                 });
@@ -154,13 +149,6 @@ namespace APIcodefirst.Migrations
                     b.ToTable("Reservation");
                 });
 
-            modelBuilder.Entity("APIcodefirst.Models.Customers", b =>
-                {
-                    b.HasOne("APIcodefirst.Models.Hotels", null)
-                        .WithMany("Customers")
-                        .HasForeignKey("HotelsHotelId");
-                });
-
             modelBuilder.Entity("APIcodefirst.Models.Rooms", b =>
                 {
                     b.HasOne("APIcodefirst.Models.Hotels", "Hotels")
@@ -207,8 +195,6 @@ namespace APIcodefirst.Migrations
 
             modelBuilder.Entity("APIcodefirst.Models.Hotels", b =>
                 {
-                    b.Navigation("Customers");
-
                     b.Navigation("Reservations");
 
                     b.Navigation("Rooms");

@@ -21,5 +21,6 @@ namespace APIcodefirst.Models
         public ICollection<Staff>? Staff { get; set; }
 
         public ICollection<Reservation>? Reservations { get; set; }
+
     }
 }

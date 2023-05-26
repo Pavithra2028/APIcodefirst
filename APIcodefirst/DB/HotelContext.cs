@@ -1,5 +1,6 @@
 ﻿using APIcodefirst.Models;
 using Microsoft.EntityFrameworkCore;
+using ClassLibrary1.Models;
 
 namespace APIcodefirst.DB
 {
@@ -15,5 +16,8 @@ namespace APIcodefirst.DB
         {
 
         }
+
+
+        public DbSet<ClassLibrary1.Models.Reservation>? Reservation { get; set; }
     }
 }

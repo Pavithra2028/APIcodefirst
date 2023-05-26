@@ -14,7 +14,14 @@ namespace APIcodefirst.Repository
 
         public void DeleteHotel(int id);
 
+        int GetRoomAvailabilityCount(string hotelname);
 
+        IEnumerable<Hotels> GetLocation(string location);
+
+
+        IEnumerable<Hotels> GetPrice(int price);
+
+        IEnumerable<Hotels> GetAmenities(string amenities);
 
     }
 }

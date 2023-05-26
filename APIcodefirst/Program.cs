@@ -1,4 +1,5 @@
 using APIcodefirst.DB;
+using APIcodefirst.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<HotelContext>(op => op.UseSqlServer(builder.Configuration.GetConnectionString("ConnStr")));
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -5,7 +5,7 @@
 namespace APIcodefirst.Migrations
 {
     /// <inheritdoc />
-    public partial class Begin : Migration
+    public partial class API : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
