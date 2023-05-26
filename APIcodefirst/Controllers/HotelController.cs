@@ -1,11 +1,13 @@
 ﻿using APIcodefirst.Models;
 using APIcodefirst.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace APIcodefirst.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class HotelController : ControllerBase

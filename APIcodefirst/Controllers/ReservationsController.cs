@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIcodefirst.DB;
 using ClassLibrary1.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APIcodefirst.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationsController : ControllerBase
