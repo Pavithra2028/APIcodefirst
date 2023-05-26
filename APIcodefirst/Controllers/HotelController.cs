@@ -2,6 +2,7 @@
 using APIcodefirst.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace APIcodefirst.Controllers
 {
@@ -15,60 +16,139 @@ namespace APIcodefirst.Controllers
         {
             this.hr = hr;
         }
-        [HttpGet]
 
-        public IEnumerable<Hotels> GetHotel()
+        [HttpGet]
+        public ActionResult<IEnumerable<Hotels>> GetHotel()
         {
-            return hr.GetHotel();
+            try
+            {
+                return Ok(hr.GetHotel());
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
-
-        public Hotels Getid(int id)
+        public ActionResult<Hotels> Getid(int id)
         {
-            return hr.GetHotelByid(id);
+            try
+            {
+                var hotel = hr.GetHotelByid(id);
+                if (hotel == null)
+                {
+                    return NotFound();
+                }
+                return Ok(hotel);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-
-        public Hotels Post(Hotels hotel)
+        public ActionResult<Hotels> Post(Hotels hotel)
         {
-            return hr.PostHotel(hotel);
+            try
+            {
+                return Ok(hr.PostHotel(hotel));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-
-        public void Put(Hotels hotel)
+        public IActionResult Put(int id, Hotels hotel)
         {
-            hr.PutHotel(hotel);
+            try
+            {
+                hr.PutHotel(hotel);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                hr.DeleteHotel(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
 
-        public void Delete(int id)
-        {
-            hr.DeleteHotel(id);
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("/filter/location")]
-        public IEnumerable<Hotels> GetLocation(string location)
+        public ActionResult<IEnumerable<Hotels>> GetLocation(string location)
         {
-            return hr.GetLocation(location);
+            try
+            {
+                return Ok(hr.GetLocation(location));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("/filter/price")]
-        public IEnumerable<Hotels> GetPrice(int price)
+        public ActionResult<IEnumerable<Hotels>> GetPrice(int price)
         {
-            return hr.GetPrice(price);
+            try
+            {
+                return Ok(hr.GetPrice(price));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("/filter/amenities")]
-        public IEnumerable<Hotels> GetAmenities(string amenities)
+        public ActionResult<IEnumerable<Hotels>> GetAmenities(string amenities)
         {
-            return hr.GetAmenities(amenities);
+            try
+            {
+                return Ok(hr.GetAmenities(amenities));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
+
         [HttpGet("/count/rooms")]
-        public int GetRoomAvailabilityCount(string hotelname)
+        public ActionResult<int> GetRoomAvailabilityCount(string hotelname)
         {
-            int availablerooms = hr.GetRoomAvailabilityCount(hotelname);
-            return availablerooms;
+            try
+            {
+                int availablerooms = hr.GetRoomAvailabilityCount(hotelname);
+                return Ok(availablerooms);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

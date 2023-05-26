@@ -18,7 +18,7 @@ namespace APIcodefirst.Repository
         }
         public IEnumerable<Hotels> GetHotel()
         {
-            return hotelContext.Hotels.ToList();
+            return hotelContext.Hotels.Include(x=>x.Rooms).ToList();
         }
         public Hotels PostHotel(Hotels hotel)
         {
