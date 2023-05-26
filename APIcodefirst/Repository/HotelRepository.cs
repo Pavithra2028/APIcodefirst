@@ -13,12 +13,18 @@ namespace APIcodefirst.Repository
             hotelContext = con;
         }
         public Hotels GetHotelByid(int id)
+
         {
+
             return hotelContext.Hotels.FirstOrDefault(x => x.HotelId == id);
         }
         public IEnumerable<Hotels> GetHotel()
         {
-            return hotelContext.Hotels.Include(x=>x.Rooms).ToList();
+            return hotelContext.Hotels
+                .Include(x=>x.Rooms)
+                .Include(x => x.Staff)
+                .Include(x=>x.Reservations)
+                .ToList();
         }
         public Hotels PostHotel(Hotels hotel)
         {

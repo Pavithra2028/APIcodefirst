@@ -11,11 +11,11 @@ namespace APIcodefirst.Models
         public string? HotelName { get; set; }
 
 
-        public string Location { get; set; }
+        public string? Location { get; set; }
         public int? Price { get; set; }
         public int RoomAvailability { get; set; }
 
-        public string Amenities { get; set; }
+        public string? Amenities { get; set; }
 
         public ICollection<Rooms>? Rooms { get; set; }
         public ICollection<Staff>? Staff { get; set; }

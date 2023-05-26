@@ -7,7 +7,7 @@ using System;
 
 namespace APIcodefirst.Controllers
 {
-    
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class HotelController : ControllerBase
