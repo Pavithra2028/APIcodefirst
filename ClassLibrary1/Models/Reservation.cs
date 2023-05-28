@@ -16,7 +16,7 @@ namespace ClassLibrary1.Models
         public DateTime Check_out_date { get; set; }
 
         
-        public Customers Customers { get; set; }
-        public Hotels hotels { get; set; }
+        public Customers? Customers { get; set; }
+        public Hotels? hotels { get; set; }
     }
 }

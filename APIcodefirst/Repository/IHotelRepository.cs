@@ -23,5 +23,7 @@ namespace APIcodefirst.Repository
 
         IEnumerable<Hotels> GetAmenities(string amenities);
 
+        IEnumerable<Hotels> FilterHotels(string location, int price, string amenities);
+
     }
 }

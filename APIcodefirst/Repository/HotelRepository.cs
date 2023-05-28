@@ -71,5 +71,28 @@ namespace APIcodefirst.Repository
 
             return availablerooms >= 0 ? availablerooms : 0;
         }
+
+        public IEnumerable<Hotels> FilterHotels(string location, int price, string amenities)
+        {
+            var filteredHotels = hotelContext.Hotels.ToList();
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                filteredHotels = filteredHotels.Where(h => h.Location.ToLower() == location.ToLower()).ToList();
+            }
+
+            if (price > 0)
+            {
+                filteredHotels = filteredHotels.Where(h => h.Price <= price).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(amenities))
+            {
+                var amenitiesList = amenities.Split(',').Select(a => a.Trim().ToLower()).ToList();
+                filteredHotels = filteredHotels.Where(h => amenitiesList.All(a => h.Amenities.ToLower().Contains(a))).ToList();
+            }
+
+            return filteredHotels;
+        }
     }
 }

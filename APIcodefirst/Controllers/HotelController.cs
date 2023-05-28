@@ -1,13 +1,15 @@
-﻿using APIcodefirst.Models;
+﻿using APIcodefirst.DB;
+using APIcodefirst.Models;
 using APIcodefirst.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace APIcodefirst.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Customer,Staff")]
     [Route("api/[controller]")]
     [ApiController]
     public class HotelController : ControllerBase
@@ -150,6 +152,19 @@ namespace APIcodefirst.Controllers
             {
 
                 return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("/filter")]
+        public ActionResult<IEnumerable<Hotels>> Filter(string location, int price, string amenities)
+        {
+            try
+            {
+                var filteredHotels = hr.FilterHotels(location, price, amenities);
+                return Ok(filteredHotels);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while filtering hotels.");
             }
         }
     }

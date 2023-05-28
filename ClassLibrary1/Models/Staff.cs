@@ -7,6 +7,10 @@ namespace APIcodefirst.Models
         [Key]
         public int StaffId { get; set; }
         public string? StaffName { get; set; }
+
+        public string? StaffPassword { get; set; }
+
+        
         public Hotels? Hotels { get; set; }
     }
 }

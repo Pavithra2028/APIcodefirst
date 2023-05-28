@@ -8,9 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using APIcodefirst.DB;
 using APIcodefirst.Models;
 using APIcodefirst.Repository;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace APIcodefirst.Controllers
 {
+    [Authorize(Roles = "Staff")]
     [Route("api/[controller]")]
     [ApiController]
     public class RoomsController : ControllerBase

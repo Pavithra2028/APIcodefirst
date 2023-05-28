@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace APIcodefirst.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Customer,Staff")]
     [Route("api/[controller]")]
     [ApiController]
     public class ReservationsController : ControllerBase

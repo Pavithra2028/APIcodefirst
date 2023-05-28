@@ -7,9 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIcodefirst.DB;
 using APIcodefirst.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace APIcodefirst.Controllers
 {
+    [Authorize(Roles = "Staff")]
     [Route("api/[controller]")]
     [ApiController]
     public class StaffsController : ControllerBase
@@ -25,21 +30,25 @@ namespace APIcodefirst.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Staff>>> GetStaffs()
         {
-          if (_context.Staffs == null)
-          {
-              return NotFound();
-          }
-            return await _context.Staffs.ToListAsync();
+            var staffs = await _context.Staffs.ToListAsync();
+            var GetStaff = staffs.Select(s => new Staff
+            {
+                StaffId = s.StaffId,
+                StaffName = s.StaffName,
+                StaffPassword = HashPassword(s.StaffPassword),
+            }).ToList();
+            return GetStaff;
         }
 
         // GET: api/Staffs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Staff>> GetStaff(int id)
+        public async Task<ActionResult<Staff>> GetStaffById(int id)
         {
-          if (_context.Staffs == null)
-          {
-              return NotFound();
-          }
+            if (_context.Staffs == null)
+            {
+                return NotFound();
+            }
+
             var staff = await _context.Staffs.FindAsync(id);
 
             if (staff == null)
@@ -47,7 +56,15 @@ namespace APIcodefirst.Controllers
                 return NotFound();
             }
 
-            return staff;
+            var getStaff = new Staff
+            {
+                StaffId = staff.StaffId,
+                StaffName = staff.StaffName,
+                StaffPassword = HashPassword(staff.StaffPassword)
+              
+            };
+
+            return getStaff;
         }
 
         // PUT: api/Staffs/5
@@ -114,6 +131,17 @@ namespace APIcodefirst.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private string HashPassword(string password)
+        {
+            // Implement password hashing logic or any other modification you require
+            // Example: Hash the password using SHA256
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(hashedBytes);
+            }
         }
 
         private bool StaffExists(int id)

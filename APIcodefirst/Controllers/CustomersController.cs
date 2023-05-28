@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIcodefirst.DB;
 using APIcodefirst.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace APIcodefirst.Controllers
 {
@@ -22,36 +26,52 @@ namespace APIcodefirst.Controllers
         }
 
         // GET: api/Customers
+        [Authorize(Roles = "Staff")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customers>>> GetCustomers()
         {
-          if (_context.Customers == null)
-          {
-              return NotFound();
-          }
-            return await _context.Customers.ToListAsync();
+            var customers = await _context.Customers.ToListAsync();
+            var customerDtos = customers.Select(c => new Customers
+            {
+                CustomerId = c.CustomerId,
+                CustomerName = c.CustomerName,
+                CustomerEmail = c.CustomerEmail,
+                CustomerPassword = HashPassword(c.CustomerPassword)
+            }).ToList();
+
+            return customerDtos;
         }
 
         // GET: api/Customers/5
+        [Authorize(Roles = "Customer,Staff")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customers>> GetCustomers(int id)
+        public async Task<ActionResult<Customers>> GetCustomerById(int id)
         {
-          if (_context.Customers == null)
-          {
-              return NotFound();
-          }
-            var customers = await _context.Customers.FindAsync(id);
-
-            if (customers == null)
+            if (_context.Customers == null)
             {
                 return NotFound();
             }
 
-            return customers;
-        }
+            var customer = await _context.Customers.FindAsync(id);
 
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            var getCustomer = new Customers
+            {
+                CustomerId = customer.CustomerId,
+                CustomerName = customer.CustomerName,
+                CustomerEmail = customer.CustomerEmail,
+                CustomerPassword = HashPassword(customer.CustomerPassword)
+            };
+
+            return getCustomer;
+        }
         // PUT: api/Customers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Customer")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomers(int id, Customers customers)
         {
@@ -97,6 +117,7 @@ namespace APIcodefirst.Controllers
         }
 
         // DELETE: api/Customers/5
+        [Authorize(Roles = "Customer")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomers(int id)
         {
@@ -115,10 +136,21 @@ namespace APIcodefirst.Controllers
 
             return NoContent();
         }
-
+        private string HashPassword(string password)
+        {
+            // Implement password hashing logic or any other modification you require
+            // Example: Hash the password using SHA256
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(hashedBytes);
+            }
+        }
         private bool CustomersExists(int id)
         {
             return (_context.Customers?.Any(e => e.CustomerId == id)).GetValueOrDefault();
         }
+
+
     }
 }
